@@ -29,7 +29,7 @@ jobs:
     - name: Deploy to EC2
       run: |
         rsync -avz --delete --exclude-from=".gitignore" -e "ssh -i ~/.ssh/id_ed25519" ./ ubuntu@${{ secrets.EC2_PUBLIC_IP }}:/var/www/html/laravel_with_github-action
-        ssh -i ~/.ssh/id_ed25519 ubuntu@${{ secrets.EC2_PUBLIC_IP }} 'cd /var/www/html/laravel_with_github-action && composer install --no-interaction --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache'
+        ssh -i ~/.ssh/id_ed25519 ubuntu@${{ secrets.EC2_PUBLIC_IP }} 'cd /var/www/html/laravel_with_github-action && composer install --no-interaction --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache ${{ secrets.RootPassword }}'
 
     - name: Clear SSH key
       run: rm ~/.ssh/id_ed25519
