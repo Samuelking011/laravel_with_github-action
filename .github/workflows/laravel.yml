@@ -76,7 +76,7 @@ jobs:
         unzip dependency-check.zip
         cd dependency-check/bin
         chmod +x dependency-check.sh  # Ensure the script is executable
-        ./dependency-check.sh --scan .
+        ./dependency-check.sh --scan . --nvd-api-key ${{ secrets.NVD_API_KEY }}
         # sudo ./bin/dependency-check.sh -h
         # sudo ./bin/dependency-check.sh --out . --scan --nvd-api-key ${{ secrets.NVD_API_KEY }}
         
