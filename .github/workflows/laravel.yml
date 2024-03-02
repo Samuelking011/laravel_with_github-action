@@ -50,9 +50,7 @@ jobs:
 
     - name: Run Linter
       run: |
-        composer clearcache 
-        composer self-update
-        sudo composer require --dev enlightn/laravel-security-checker:^1.1 --with-all-dependencies
+        sudo composer require --dev jorijn/laravel-security-checker --with-all-dependencies
         php artisan security:check
         
     # - name: Run Linter
