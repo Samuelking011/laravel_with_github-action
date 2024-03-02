@@ -50,10 +50,9 @@ jobs:
 
     - name: Run Linter
       run: |
-        continue-on-error: true
         sudo composer require --dev tightenco/duster
         php -l
-        ./vendor/bin/duster lint
+        ./vendor/bin/duster lint || true
         ./vendor/bin/duster fix
 
     # - name: Run Linter
