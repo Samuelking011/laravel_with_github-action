@@ -71,7 +71,7 @@ jobs:
 
     - name: Download Selenium Server
       run: |
-        php composer.phar require php-webdriver/webdriver
+        composer require php-webdriver/webdriver
 
     - name: Start Selenium Server
       run: java -jar selenium-server-standalone.jar > /dev/null 2>&1 &
