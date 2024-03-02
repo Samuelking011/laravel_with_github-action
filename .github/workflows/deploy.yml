@@ -1,35 +1,163 @@
-name: Deploy to EC
+name: CI/CD pipeline for Card NG
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    
+  # push:
+  #   branches:
+  #     develop
 
 jobs:
-  deploy:
+  continuous-and-automated-testing:
+    name: Perform Continuous Integration (CI) task
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: checkout code
+        uses: actions/checkout@v3
+        # with:
+        #   ref: develop
 
-    - name: Configure SSH
-      run: |
-        mkdir -p ~/.ssh/
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
 
-    - name: Install PHP and dependencies
-      run: sudo apt-get update && sudo apt-get install php php-mbstring php-xml
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+          # tools: phpcs # use for PHP_CodeSniffer-based linit test
+          tools: composer # use for Composer-based lint test
+        
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
 
-    - name: Install Composer dependencies
-      run: composer install --no-interaction --prefer-dist --optimize-autoloader
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          dev: no
+          php_version: "8.1"
+          args: "--ignore-platform-reqs --no-scripts --optimize-autoloader"
+          
+      # - name: Run Migrations
+      #   run: php artisan migrate --seed --force
+      # - name: Run Tests
+      #   run: \
+      #     composer require --dev phpunit/phpunit
+      #     ./vendor/bin/phpunit
+      - name: Run Tests
+        uses: php-actions/composer@v6
+        with:
+          dev: no
+          php_version: "8.1"
+          args: "composer require composer require phpunit/phpunit && composer install && ./vendor/bin/phpunit"
 
-    - name: Deploy to EC2
-      run: |
-        rsync -avz --delete --exclude-from=".gitignore" -e "ssh -i ~/.ssh/id_ed25519" ./ ubuntu@${{ secrets.EC2_PUBLIC_IP }}:/var/www/html/laravel_with_github-action
-        ssh -i ~/.ssh/id_ed25519 ubuntu@${{ secrets.EC2_PUBLIC_IP }} 'cd /var/www/html/laravel_with_github-action && composer install --no-interaction --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache'
+  #     - name: Install Behat and Mink
+  #       run: |
+  #         composer require --dev behat/behat behat/mink behat/mink-extension
+  #         composer require --dev friends-of-behat/mink-selenium2-driver
+          
+  #     - name: Run Linter
+  #       uses: wearerequired/lint-action@v2
+  #       with:
+  #         php_codesniffer: true
+  #         # # Optional: Ignore warnings
+  #         # php_codesniffer_args: "-n" 
+  #         auto_fix: true
 
-    - name: Clear SSH key
-      run: rm ~/.ssh/id_ed25519
+  #     - name: Download Selenium Server
+  #       run: |
+  #         SELENIUM_VERSION="3.141.59"
+  #         wget "https://selenium-release.storage.googleapis.com/${SELENIUM_VERSION}/selenium-server-standalone-${SELENIUM_VERSION}.jar" -O selenium-server-standalone.jar
+     
+  #     - name: Start Selenium Server
+  #       run: java -jar selenium-server-standalone.jar
+  #      # background: true
+       
+  #     - name: Run Selenium Tests
+  #       run: php artisan dusk
+
+  #     - name: Run Cucumber Tests
+  #       run: php artisan behat
+
+  #     - name: Set up Snyk CLI to check for vulnerabilities and security issues
+  #       uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  #       # Runs Snyk Open Source (SCA) analysis and uploads result to Snyk.
+  #     - name: Snyk PHP Source monitor
+  #       run: snyk monitor --all-projects
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  #       # Runs Snyk PHP analysis and uploads result to Snyk.
+  #       # Use || true to not fail the pipeline.
+  #     - name: Snyk PHP test and report
+  #       run: snyk php test --report || true
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  #     - name: Run Snyk to check configuration files for vulnerabilities and security issues
+  #       continue-on-error: true
+  #       uses: snyk/actions/php@master
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  #       with:
+  #           args: --sarif-file-output=snyk.sarif
+
+  #       # Push the Snyk Code results into GitHub Code Scanning tab
+  #     - name: Upload result to GitHub Code Scanning
+  #       uses: github/codeql-action/upload-sarif@v2
+  #       with:
+  #         sarif_file: snyk.sarif
+
+  #     - name: Scan for Code Quality
+  #       uses: SonarSource/sonarcloud-github-action@master
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # - name: GitGuardian scan
+      #   uses: GitGuardian/ggshield/actions/secret@main
+      #   env:
+      #     GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+      #     GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+      #     GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      #     GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      #     GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+# name: Deploy to EC
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v2
+
+#     - name: Configure SSH
+#       run: |
+#         mkdir -p ~/.ssh/
+#         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+#         chmod 600 ~/.ssh/id_ed25519
+#         ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
+
+#     - name: Install PHP and dependencies
+#       run: sudo apt-get update && sudo apt-get install php php-mbstring php-xml
+
+#     - name: Install Composer dependencies
+#       run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+#     - name: Deploy to EC2
+#       run: |
+#         rsync -avz --delete --exclude-from=".gitignore" -e "ssh -i ~/.ssh/id_ed25519" ./ ubuntu@${{ secrets.EC2_PUBLIC_IP }}:/var/www/html/laravel_with_github-action
+#         ssh -i ~/.ssh/id_ed25519 ubuntu@${{ secrets.EC2_PUBLIC_IP }} 'cd /var/www/html/laravel_with_github-action && composer install --no-interaction --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache'
+
+#     - name: Clear SSH key
+#       run: rm ~/.ssh/id_ed25519
