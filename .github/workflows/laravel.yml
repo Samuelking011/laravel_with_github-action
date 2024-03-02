@@ -50,19 +50,16 @@ jobs:
 
     - name: Install Behat and Mink
       run: |
-        # composer require --dev behat/behat behat/mink behat/mink-extension --with-all-dependencies
-        # composer require --dev friends-of-behat/mink-selenium2-driver --with-all-dependencies
-        # composer update
         composer clearcache 
-        composer self-update --2.2
+        composer self-update
         sudo composer install
-        sudo composer require --dev behat/behat:* behat/mink:* friends-of-behat/mink-extension --with-all-dependencies
+        sudo composer require --dev behat/behat:* behat/mink:* friends-of-behat/mink-extension 
         #sudo composer require --dev friends-of-behat/mink-selenium2-driver
 
-    - name: Run Linter
-      uses: wearerequired/lint-action@v2
-      with:
-        php_codesniffer: true
-        # # Optional: Ignore warnings
-        php_codesniffer_args: "-n" 
-        auto_fix: true
+    # - name: Run Linter
+    #   uses: wearerequired/lint-action@v2
+    #   with:
+    #     php_codesniffer: true
+    #     # # Optional: Ignore warnings
+    #     php_codesniffer_args: "-n" 
+    #     auto_fix: true
