@@ -53,9 +53,10 @@ jobs:
       run: |
         composer clearcache 
         composer self-update
-        #composer install
-        sudo composer require --dev behat/behat:* behat/mink:* friends-of-behat/mink-extension 
-        sudo composer require --dev behat/mink-selenium2-driver
+        sudo composer install
+        # sudo composer require --dev behat/behat:* behat/mink:* friends-of-behat/mink-extension 
+        # sudo composer require --dev behat/mink-selenium2-driver
+        
     # - name: Run Linter
     #   uses: wearerequired/lint-action@v2
     #   with:
