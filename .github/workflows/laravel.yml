@@ -72,7 +72,7 @@ jobs:
     - name: Download Selenium Server
       run: |
         sudo composer require --dev laravel/dusk
-        php artisan dusk:install
+        sudo php artisan dusk:install
         php artisan dusk
 
     # - name: Download Selenium Server
