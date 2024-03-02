@@ -28,7 +28,7 @@ jobs:
       uses: php-actions/composer@v6
       with:
         php_version: "8.1"
-        args: "update -q --no-scripts"
+        #args: "update -q --no-scripts"
       
     - name: Generate key
       run: php artisan key:generate
