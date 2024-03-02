@@ -56,7 +56,7 @@ jobs:
         composer clearcache 
         composer selfupdate
         sudo composer install
-        sudo composer require --dev behat/behat:* behat/mink:* behat/mink-extension --with-all-dependencies
+        sudo composer require --dev behat/behat:* behat/mink:* behat/mink-extension:* --with-all-dependencies
         sudo composer require --dev friends-of-behat/mink-selenium2-driver
 
     - name: Run Linter
