@@ -71,8 +71,8 @@ jobs:
 
     - name: Download Selenium Server
       run: |
-        SELENIUM_VERSION="3.141.59"
-        wget "https://selenium-release.storage.googleapis.com/${SELENIUM_VERSION}/selenium-server-standalone-${SELENIUM_VERSION}.jar" -O selenium-server-standalone.jar
+        curl -sS https://getcomposer.org/installer | php
+        php composer.phar require php-webdriver/webdriver
 
     - name: Start Selenium Server
       run: java -jar selenium-server-standalone.jar > /dev/null 2>&1 &
