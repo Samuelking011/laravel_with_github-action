@@ -50,11 +50,18 @@ jobs:
 
     - name: Run Linter
       run: |
-        sudo composer require --dev nunomaduro/larastan
-        sudo composer require --dev phpstan/phpstan
+        sudo composer require --dev tightenco/duster
         php -l
-        ./vendor/bin/phpstan analyze * --no-progress
+        ./vendor/bin/duster lint
         continue-on-error: true
+
+    # - name: Run Linter
+    #   run: |
+    #     sudo composer require --dev nunomaduro/larastan
+    #     sudo composer require --dev phpstan/phpstan
+    #     php -l
+    #     ./vendor/bin/phpstan analyze * --no-progress
+    #     continue-on-error: true
 
 
     - name: Install Behat and Mink
