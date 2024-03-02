@@ -68,9 +68,10 @@ jobs:
       run: |
         vendor/bin/behat --init
         vendor/bin/behat
+        
     - name: Download Selenium Server
       run: |
-        composer require --dev laravel/dusk
+        sudo composer require --dev laravel/dusk
         php artisan dusk:install
         php artisan dusk
 
