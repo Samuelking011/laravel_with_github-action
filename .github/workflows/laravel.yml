@@ -75,7 +75,12 @@ jobs:
         git diff --quiet || git commit -m "Fix code style with Duster"
 
     - name: Push Changes
-      run: git push
+      run: |
+        git remote set-url origin https://github.com/${{ github.repository }}
+        git push origin main
+      env:
+        GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      
 
     # - name: Install Behat and Mink
     #   run: |
