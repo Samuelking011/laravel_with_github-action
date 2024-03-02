@@ -65,4 +65,5 @@ jobs:
     #     auto_fix: true
 
     - name: Run Cucumber Tests
-      run: php artisan behat
+      run: 
+        sudo php artisan behat
