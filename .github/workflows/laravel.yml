@@ -71,8 +71,7 @@ jobs:
 
     - name: Download Selenium Server
       run: |
-        SELENIUM_VERSION="4.18.1"
-        wget "https://selenium-release.storage.googleapis.com/${SELENIUM_VERSION}/selenium-server-standalone-${SELENIUM_VERSION}.jar" -O selenium-server-standalone.jar
+        php composer.phar require php-webdriver/webdriver
 
     - name: Start Selenium Server
       run: java -jar selenium-server-standalone.jar > /dev/null 2>&1 &
