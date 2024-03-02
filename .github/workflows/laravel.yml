@@ -78,7 +78,7 @@ jobs:
         chmod +x dependency-check.sh  # Ensure the script is executable
         ./dependency-check.sh --scan .
         # sudo ./bin/dependency-check.sh -h
-        # sudo ./bin/dependency-check.sh --out . --scan
+        # sudo ./bin/dependency-check.sh --out . --scan --nvd-api-key ${{ secrets.NVD_API_KEY }}
         
     # - name: Download Selenium Server
     #   run: |
