@@ -53,8 +53,7 @@ jobs:
         # composer require --dev behat/behat behat/mink behat/mink-extension --with-all-dependencies
         # composer require --dev friends-of-behat/mink-selenium2-driver --with-all-dependencies
         # composer update
-        composer self-update --2
-        composer clear-cache
+        composer install
         composer require --dev behat/behat
 
     - name: Run Linter
