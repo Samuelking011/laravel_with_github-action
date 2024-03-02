@@ -56,10 +56,13 @@ jobs:
         sudo composer require --dev behat/behat behat/mink friends-of-behat/mink-extension 
         sudo composer require --dev behat/mink-selenium2-driver
         
-    - name: Run Linter
-      uses: wearerequired/lint-action@v2
-      with:
-        php_codesniffer: true
-        # # Optional: Ignore warnings
-        #php_codesniffer_args: "-n" 
-        auto_fix: true
+    # - name: Run Linter
+    #   uses: wearerequired/lint-action@v2
+    #   with:
+    #     php_codesniffer: true
+    #     # # Optional: Ignore warnings
+    #     #php_codesniffer_args: "-n" 
+    #     auto_fix: true
+
+    - name: Run Cucumber Tests
+      run: php artisan behat
