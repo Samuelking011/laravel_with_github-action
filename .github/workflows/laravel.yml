@@ -15,7 +15,7 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
-        php-version: '7.1'
+        php-version: '8.1'
         tools: phpcs # use for PHP_CodeSniffer-based linit test
         
     - name: Check out code
@@ -27,7 +27,7 @@ jobs:
     - name: Install Dependencies
       uses: php-actions/composer@v6
       with:
-        php_version: "7.1"
+        php_version: "8.1"
         #args: "update -q --no-scripts"
       
     - name: Generate key
@@ -54,7 +54,7 @@ jobs:
         # composer require --dev friends-of-behat/mink-selenium2-driver --with-all-dependencies
         # composer update
         composer clearcache 
-        composer selfupdate
+        composer self-update --2.2
         sudo composer install
         sudo composer require --dev behat/behat:* behat/mink:* behat/mink-extension:^2.1 --with-all-dependencies
         #sudo composer require --dev friends-of-behat/mink-selenium2-driver
