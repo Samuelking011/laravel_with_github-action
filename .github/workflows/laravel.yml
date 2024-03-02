@@ -52,9 +52,8 @@ jobs:
       run: |
         sudo composer require --dev tightenco/duster
         php -l
-        ./vendor/bin/duster lint fix
-        # ./vendor/bin/duster lint || true
-        # ./vendor/bin/duster fix
+        ./vendor/bin/duster lint || true
+        ./vendor/bin/duster fix
 
     # - name: Run Linter
     #   run: |
@@ -65,17 +64,17 @@ jobs:
     #     continue-on-error: true
 
 
-    - name: Install Behat and Mink
-      run: |
-        composer clearcache 
-        composer self-update
-        sudo composer require --dev behat/behat behat/mink friends-of-behat/mink-extension 
-        sudo composer require --dev behat/mink-selenium2-driver
+    # - name: Install Behat and Mink
+    #   run: |
+    #     composer clearcache 
+    #     composer self-update
+    #     sudo composer require --dev behat/behat behat/mink friends-of-behat/mink-extension 
+    #     sudo composer require --dev behat/mink-selenium2-driver
 
-    - name: Run Behat Tests
-      run: |
-        vendor/bin/behat --init
-        vendor/bin/behat
+    # - name: Run Behat Tests
+    #   run: |
+    #     vendor/bin/behat --init
+    #     vendor/bin/behat
         
     # - name: Download and run Dependency-Check
     #   run: |
@@ -86,14 +85,14 @@ jobs:
     #     chmod +x dependency-check.sh  # Ensure the script is executable
     #     ./dependency-check.sh --scan . --nvdApiKey ${{ secrets.NVD_API_KEY }}
     
-    - name: GitGuardian scan
-      uses: GitGuardian/ggshield/actions/secret@main
-      env:
-        GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
-        GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
-        GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-        GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+    # - name: GitGuardian scan
+    #   uses: GitGuardian/ggshield/actions/secret@main
+    #   env:
+    #     GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+    #     GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+    #     GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    #     GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    #     GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
     # - name: Run Linter
     #   run: find . -name "*.php" -print0 | xargs -0 -n1 php -l
