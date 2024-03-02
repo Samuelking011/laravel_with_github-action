@@ -67,10 +67,8 @@ jobs:
     #     ./vendor/bin/duster fix
 
     - name: Run Duster Fix
-      run: ./vendor/bin/duster fix
-
-    - name: Commit Changes
-      run: |
+      run: 
+        ./vendor/bin/duster fix
         git add .
         git diff --quiet || git commit -m "Fix code style with Duster"
 
