@@ -59,12 +59,23 @@ jobs:
     #     sudo composer require --dev jorijn/laravel-security-checker --with-all-dependencies
     #     php artisan security-check:now
         
-    # - name: Run Linter
-    #   run: |
-    #     sudo composer require --dev tightenco/duster
-    #     php -l
-    #     ./vendor/bin/duster lint || true
+    - name: Run Linter
+      run: |
+        sudo composer require --dev tightenco/duster
+        php -l
+        ./vendor/bin/duster lint || true
     #     ./vendor/bin/duster fix
+
+    - name: Run Duster Fix
+      run: ./vendor/bin/duster fix
+
+    - name: Commit Changes
+      run: |
+        git add .
+        git diff --quiet || git commit -m "Fix code style with Duster"
+
+    - name: Push Changes
+      run: git push
 
     # - name: Install Behat and Mink
     #   run: |
