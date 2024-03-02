@@ -69,11 +69,18 @@ jobs:
         vendor/bin/behat --init
         vendor/bin/behat
         
-    - name: Download Selenium Server
+    - name: Download and run Dependency-Check
       run: |
-        sudo composer require --dev laravel/dusk
-        sudo php artisan dusk:install
-        sudo php artisan dusk --without-tty --disable-gpu
+        wget https://dl.bintray.com/jeremy-long/owasp/dependency-check-6.2.2-release.zip
+        unzip dependency-check-6.2.2-release.zip
+        cd dependency-check/bin
+        ./dependency-check.sh --scan .
+        
+    # - name: Download Selenium Server
+    #   run: |
+    #     sudo composer require --dev laravel/dusk
+    #     sudo php artisan dusk:install
+    #     sudo php artisan dusk --without-tty
 
     # - name: Download Selenium Server
     #   run: |
