@@ -53,6 +53,7 @@ jobs:
         sudo composer require --dev tightenco/duster
         php -l
         ./vendor/bin/duster lint
+        ./vendor/bin/duster fix
         continue-on-error: true
 
     # - name: Run Linter
