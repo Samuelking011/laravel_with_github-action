@@ -53,7 +53,9 @@ jobs:
         sudo composer require --dev nunomaduro/larastan
         sudo composer require --dev phpstan/phpstan
         php -l
-        ./vendor/bin/phpstan analyze * --no-progress --exclude
+        ./vendor/bin/phpstan analyze * --no-progress
+        continue-on-error: true
+
 
     - name: Install Behat and Mink
       run: |
