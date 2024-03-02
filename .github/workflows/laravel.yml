@@ -82,7 +82,7 @@ jobs:
       run: |
         php -l
         sudo composer require --dev nunomaduro/larastan
-        php artisan code:analyse
+        ./vendor/bin/larastan
         #find . -name "*.php" -print0 | xargs -0 -n1 php -l
       # uses: wearerequired/lint-action@v2
       # with:
