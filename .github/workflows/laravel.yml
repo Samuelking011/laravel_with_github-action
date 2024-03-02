@@ -52,7 +52,7 @@ jobs:
       run: |
         sudo composer require --dev tightenco/duster
         php -l
-        ./vendor/bin/duster lint --fix
+        ./vendor/bin/duster lint fix
         # ./vendor/bin/duster lint || true
         # ./vendor/bin/duster fix
 
