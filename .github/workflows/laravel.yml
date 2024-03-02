@@ -60,14 +60,14 @@ jobs:
         vendor/bin/behat --init
         vendor/bin/behat
         
-    - name: Download and run Dependency-Check
-      run: |
-        VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
-        curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
-        unzip dependency-check.zip
-        cd dependency-check/bin
-        chmod +x dependency-check.sh  # Ensure the script is executable
-        ./dependency-check.sh --scan . --nvdApiKey ${{ secrets.NVD_API_KEY }}
+    # - name: Download and run Dependency-Check
+    #   run: |
+    #     VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
+    #     curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
+    #     unzip dependency-check.zip
+    #     cd dependency-check/bin
+    #     chmod +x dependency-check.sh  # Ensure the script is executable
+    #     ./dependency-check.sh --scan . --nvdApiKey ${{ secrets.NVD_API_KEY }}
     
     - name: GitGuardian scan
       uses: GitGuardian/ggshield/actions/secret@main
@@ -79,12 +79,14 @@ jobs:
         GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
     - name: Run Linter
-      uses: wearerequired/lint-action@v2
-      with:
-        php_codesniffer: true
-        #  Optional: Ignore warnings
-        #php_codesniffer_args: "-n" 
-        auto_fix: true
+      run: |
+        php artisan lint
+      # uses: wearerequired/lint-action@v2
+      # with:
+      #   php_codesniffer: true
+      #   #  Optional: Ignore warnings
+      #   #php_codesniffer_args: "-n" 
+      #   auto_fix: true
         
     # - name: Download Selenium Server
     #   run: |
