@@ -50,7 +50,7 @@ jobs:
 
     - name: Install Behat and Mink
       run: |
-        composer require --dev behat/behat behat/mink behat/mink-extension --with-all-dependencies
+        # composer require --dev behat/behat behat/mink behat/mink-extension --with-all-dependencies
         composer require --dev friends-of-behat/mink-selenium2-driver --with-all-dependencies
         composer update
 
