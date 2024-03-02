@@ -80,7 +80,7 @@ jobs:
 
     - name: Run Linter
       run: |
-        php artisan lint
+        find . -name "*.php" -print0 | xargs -0 -n1 php -l
       # uses: wearerequired/lint-action@v2
       # with:
       #   php_codesniffer: true
