@@ -48,6 +48,13 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: vendor/bin/phpunit
 
+    - name: Run Linter
+      run: |
+        sudo composer require --dev nunomaduro/larastan
+        sudo composer require --dev phpstan/phpstan
+        php -l
+        ./vendor/bin/phpstan analyze * --no-progress --ignoreErrors
+
     - name: Install Behat and Mink
       run: |
         composer clearcache 
@@ -78,18 +85,14 @@ jobs:
         GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
-    - name: Run Linter
-      run: |
-        php -l
-        sudo composer require --dev nunomaduro/larastan
-        ./vendor/bin/phpstan analyze *
-        #find . -name "*.php" -print0 | xargs -0 -n1 php -l
-      # uses: wearerequired/lint-action@v2
-      # with:
-      #   php_codesniffer: true
-      #   #  Optional: Ignore warnings
-      #   #php_codesniffer_args: "-n" 
-      #   auto_fix: true
+    # - name: Run Linter
+    #   run: find . -name "*.php" -print0 | xargs -0 -n1 php -l
+    #   uses: wearerequired/lint-action@v2
+    #   with:
+    #     php_codesniffer: true
+    #     #  Optional: Ignore warnings
+    #     #php_codesniffer_args: "-n" 
+    #     auto_fix: true
         
     # - name: Download Selenium Server
     #   run: |
