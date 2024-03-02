@@ -51,7 +51,7 @@ jobs:
     - name: Run Linter
       run: |
         sudo composer require --dev jorijn/laravel-security-checker --with-all-dependencies
-        php artisan security:check
+        php artisan security-check:now
         
     # - name: Run Linter
     #   run: |
