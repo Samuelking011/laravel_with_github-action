@@ -54,7 +54,7 @@ jobs:
         composer self-update
         sudo composer install
         sudo composer require --dev behat/behat:* behat/mink:* friends-of-behat/mink-extension 
-        #sudo composer require --dev friends-of-behat/mink-selenium2-driver
+        sudo composer require --dev friends-of-behat/mink-selenium2-driver
 
     # - name: Run Linter
     #   uses: wearerequired/lint-action@v2
