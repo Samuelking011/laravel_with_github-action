@@ -68,3 +68,22 @@ jobs:
       run: |
         vendor/bin/behat --init
         vendor/bin/behat
+
+    - name: Download Selenium Server
+      run: |
+        SELENIUM_VERSION="3.141.59"
+        wget "https://selenium-release.storage.googleapis.com/${SELENIUM_VERSION}/selenium-server-standalone-${SELENIUM_VERSION}.jar" -O selenium-server-standalone.jar
+
+    - name: Start Selenium Server
+      run: java -jar selenium-server-standalone.jar > /dev/null 2>&1 &
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4
+  
+    - name: Install dependencies
+      run: composer install
+  
+    - name: Run Selenium Tests
+      run: php artisan dusk
