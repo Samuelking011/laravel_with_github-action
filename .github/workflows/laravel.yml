@@ -60,7 +60,7 @@ jobs:
     #   uses: wearerequired/lint-action@v2
     #   with:
     #     php_codesniffer: true
-    #     # # Optional: Ignore warnings
+    #     #  Optional: Ignore warnings
     #     #php_codesniffer_args: "-n" 
     #     auto_fix: true
 
