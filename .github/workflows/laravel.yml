@@ -50,10 +50,15 @@ jobs:
 
     - name: Run Linter
       run: |
-        sudo composer require --dev tightenco/duster
-        php -l
-        ./vendor/bin/duster lint || true
-        ./vendor/bin/duster fix
+        sudo composer require --dev enlightn/laravel-security-checker
+        php artisan security:check
+        
+    # - name: Run Linter
+    #   run: |
+    #     sudo composer require --dev tightenco/duster
+    #     php -l
+    #     ./vendor/bin/duster lint || true
+    #     ./vendor/bin/duster fix
 
     # - name: Run Linter
     #   run: |
