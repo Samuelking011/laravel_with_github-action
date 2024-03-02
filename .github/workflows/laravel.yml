@@ -48,17 +48,48 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: vendor/bin/phpunit
 
-    - name: Run Linter
+    - name: Run security check
       run: |
         sudo composer require --dev jorijn/laravel-security-checker --with-all-dependencies
         php artisan security-check:now
         
-    # - name: Run Linter
-    #   run: |
-    #     sudo composer require --dev tightenco/duster
-    #     php -l
-    #     ./vendor/bin/duster lint || true
-    #     ./vendor/bin/duster fix
+    - name: Run Linter
+      run: |
+        sudo composer require --dev tightenco/duster
+        php -l
+        ./vendor/bin/duster lint || true
+        ./vendor/bin/duster fix
+
+    - name: Install Behat and Mink
+      run: |
+        composer clearcache 
+        composer self-update
+        sudo composer require --dev behat/behat behat/mink friends-of-behat/mink-extension 
+        sudo composer require --dev behat/mink-selenium2-driver
+
+    - name: Run Behat Tests
+      run: |
+        vendor/bin/behat --init
+        vendor/bin/behat
+        
+    - name: Download and run Dependency-Check
+      run: |
+        VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
+        curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
+        unzip dependency-check.zip
+        cd dependency-check/bin
+        chmod +x dependency-check.sh  # Ensure the script is executable
+        ./dependency-check.sh --scan . --nvdApiKey ${{ secrets.NVD_API_KEY }}
+    
+    - name: GitGuardian scan
+      uses: GitGuardian/ggshield/actions/secret@main
+      env:
+        GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+        GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+        GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
 
     # - name: Run Linter
     #   run: |
@@ -67,37 +98,6 @@ jobs:
     #     php -l
     #     ./vendor/bin/phpstan analyze * --no-progress
     #     continue-on-error: true
-
-
-    # - name: Install Behat and Mink
-    #   run: |
-    #     composer clearcache 
-    #     composer self-update
-    #     sudo composer require --dev behat/behat behat/mink friends-of-behat/mink-extension 
-    #     sudo composer require --dev behat/mink-selenium2-driver
-
-    # - name: Run Behat Tests
-    #   run: |
-    #     vendor/bin/behat --init
-    #     vendor/bin/behat
-        
-    # - name: Download and run Dependency-Check
-    #   run: |
-    #     VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
-    #     curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
-    #     unzip dependency-check.zip
-    #     cd dependency-check/bin
-    #     chmod +x dependency-check.sh  # Ensure the script is executable
-    #     ./dependency-check.sh --scan . --nvdApiKey ${{ secrets.NVD_API_KEY }}
-    
-    # - name: GitGuardian scan
-    #   uses: GitGuardian/ggshield/actions/secret@main
-    #   env:
-    #     GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
-    #     GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
-    #     GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-    #     GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-    #     GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
     # - name: Run Linter
     #   run: find . -name "*.php" -print0 | xargs -0 -n1 php -l
