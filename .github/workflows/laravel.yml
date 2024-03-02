@@ -76,8 +76,8 @@ jobs:
         # unzip dependency-check-$VERSION-release.zip
         # cd dependency-check/bin
         # ./dependency-check.sh --scan .
-        ./bin/dependency-check.sh -h
-        ./bin/dependency-check.sh --out . --scan
+        sudo ./bin/dependency-check.sh -h
+        sudo ./bin/dependency-check.sh --out . --scan
         
     # - name: Download Selenium Server
     #   run: |
