@@ -73,7 +73,7 @@ jobs:
       run: |
         sudo composer require --dev laravel/dusk
         sudo php artisan dusk:install
-        sudo php artisan dusk --without-tty
+        sudo php artisan dusk --without-tty --disable-gpu
 
     # - name: Download Selenium Server
     #   run: |
