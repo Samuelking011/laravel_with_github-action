@@ -73,8 +73,9 @@ jobs:
       run: |
         VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
         curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
-        # unzip dependency-check-$VERSION-release.zip
+        unzip dependency-check.zip
         cd dependency-check/bin
+        chmod +x dependency-check.sh  # Ensure the script is executable
         ./dependency-check.sh --scan .
         # sudo ./bin/dependency-check.sh -h
         # sudo ./bin/dependency-check.sh --out . --scan
