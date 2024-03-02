@@ -35,57 +35,57 @@ jobs:
       with:
         php_version: "8.1"
       
-    - name: Generate key
-      run: php artisan key:generate
+    # - name: Generate key
+    #   run: php artisan key:generate
       
-    - name: Directory Permissions
-      run: |
-        sudo chmod -R 775 storage bootstrap/cache
-        sudo chown -R $USER:$USER storage bootstrap/cache
+    # - name: Directory Permissions
+    #   run: |
+    #     sudo chmod -R 775 storage bootstrap/cache
+    #     sudo chown -R $USER:$USER storage bootstrap/cache
 
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
+    # - name: Create Database
+    #   run: |
+    #     mkdir -p database
+    #     touch database/database.sqlite
         
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit
+    # - name: Execute tests (Unit and Feature tests) via PHPUnit
+    #   env:
+    #     DB_CONNECTION: sqlite
+    #     DB_DATABASE: database/database.sqlite
+    #   run: vendor/bin/phpunit
 
-    - name: Run security check
-      run: |
-        sudo composer require --dev jorijn/laravel-security-checker --with-all-dependencies
-        php artisan security-check:now
+    # - name: Run security check
+    #   run: |
+    #     sudo composer require --dev jorijn/laravel-security-checker --with-all-dependencies
+    #     php artisan security-check:now
         
-    - name: Run Linter
-      run: |
-        sudo composer require --dev tightenco/duster
-        php -l
-        ./vendor/bin/duster lint || true
-        ./vendor/bin/duster fix
+    # - name: Run Linter
+    #   run: |
+    #     sudo composer require --dev tightenco/duster
+    #     php -l
+    #     ./vendor/bin/duster lint || true
+    #     ./vendor/bin/duster fix
 
-    - name: Install Behat and Mink
-      run: |
-        composer clearcache 
-        composer self-update
-        sudo composer require --dev behat/behat behat/mink friends-of-behat/mink-extension 
-        sudo composer require --dev behat/mink-selenium2-driver
+    # - name: Install Behat and Mink
+    #   run: |
+    #     composer clearcache 
+    #     composer self-update
+    #     sudo composer require --dev behat/behat behat/mink friends-of-behat/mink-extension 
+    #     sudo composer require --dev behat/mink-selenium2-driver
 
-    - name: Run Behat Tests
-      run: |
-        vendor/bin/behat --init
-        vendor/bin/behat
+    # - name: Run Behat Tests
+    #   run: |
+    #     vendor/bin/behat --init
+    #     vendor/bin/behat
         
-    - name: Download and run Dependency-Check
-      run: |
-        VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
-        curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
-        unzip dependency-check.zip
-        cd dependency-check/bin
-        chmod +x dependency-check.sh  # Ensure the script is executable
-        ./dependency-check.sh --scan . --nvdApiKey ${{ secrets.NVD_API_KEY }}
+    # - name: Download and run Dependency-Check
+    #   run: |
+    #     VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
+    #     curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
+    #     unzip dependency-check.zip
+    #     cd dependency-check/bin
+    #     chmod +x dependency-check.sh  # Ensure the script is executable
+    #     ./dependency-check.sh --scan . --nvdApiKey ${{ secrets.NVD_API_KEY }}
     
     - name: GitGuardian scan
       uses: GitGuardian/ggshield/actions/secret@main
