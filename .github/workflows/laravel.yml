@@ -28,7 +28,6 @@ jobs:
       uses: php-actions/composer@v6
       with:
         php_version: "8.1"
-        #args: "update -q --no-scripts"
       
     - name: Generate key
       run: php artisan key:generate
@@ -55,14 +54,6 @@ jobs:
         composer self-update
         sudo composer require --dev behat/behat behat/mink friends-of-behat/mink-extension 
         sudo composer require --dev behat/mink-selenium2-driver
-        
-    # - name: Run Linter
-    #   uses: wearerequired/lint-action@v2
-    #   with:
-    #     php_codesniffer: true
-    #     #  Optional: Ignore warnings
-    #     #php_codesniffer_args: "-n" 
-    #     auto_fix: true
 
     - name: Run Behat Tests
       run: |
@@ -77,8 +68,23 @@ jobs:
         cd dependency-check/bin
         chmod +x dependency-check.sh  # Ensure the script is executable
         ./dependency-check.sh --scan . --nvdApiKey ${{ secrets.NVD_API_KEY }}
-        # sudo ./bin/dependency-check.sh -h
-        # sudo ./bin/dependency-check.sh --out . --scan --nvd-api-key ${{ secrets.NVD_API_KEY }}
+    
+    - name: GitGuardian scan
+      uses: GitGuardian/ggshield/actions/secret@main
+      env:
+        GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+        GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+        GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+    # - name: Run Linter
+    #   uses: wearerequired/lint-action@v2
+    #   with:
+    #     php_codesniffer: true
+    #     #  Optional: Ignore warnings
+    #     #php_codesniffer_args: "-n" 
+    #     auto_fix: true
         
     # - name: Download Selenium Server
     #   run: |
